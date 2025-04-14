@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Anime Personality Quiz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Which Anime Character Are You?</h1>
+        <form action="/submit" method="post">
+            {% for i, q in enumerate(questions) %}
+                <div class="question-block">
+                    <p><strong>Q{{ i+1 }}:</strong> {{ q.question }}</p>
+                    {% for opt in q.options %}
+                        <label>
+                            <input type="radio" name="q{{ i }}" value="{{ opt }}" required>
+                            {{ opt }}
+                        </label><br>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+            <button type="submit">Find Out!</button>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Anime Match</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>You are most like:</h1>
+        <h2>{{ character }}</h2>
+        <a href="/">Try Again</a>
+    </div>
+</body>
+</html>

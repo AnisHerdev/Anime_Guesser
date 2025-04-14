@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 from sentence_transformers import SentenceTransformer, util
+from transformers import pipeline
 
 app = Flask(__name__)
 model = SentenceTransformer('all-MiniLM-L6-v2')
@@ -14,29 +15,27 @@ characters = {
     "Eren Yeager": "angry, vengeful, passionate, rebellious"
 }
 
-# Questions and options
-questions = [
-    {
-        "question": "How do you handle conflict?",
-        "options": ["Stay calm and find a solution", "Confront head-on", "Use strategy", "Let emotions drive me"]
-    },
-    {
-        "question": "What motivates you the most?",
-        "options": ["Protecting loved ones", "Becoming stronger", "Achieving justice", "Outsmarting opponents"]
-    },
-    {
-        "question": "Pick a trait you value most:",
-        "options": ["Loyalty", "Intelligence", "Courage", "Kindness"]
-    },
-    {
-        "question": "In a team, what role do you play?",
-        "options": ["Leader", "Supporter", "Strategist", "Wild card"]
-    },
-    {
-        "question": "How do you deal with failure?",
-        "options": ["Learn from it", "Try harder", "Blame others", "Get emotional"]
-    }
-]
+# Use a pretrained chatbot model to generate questions and options
+chatbot = pipeline("text-generation", model="gpt-2")
+
+# Prompt the chatbot to generate questions and options
+prompt = (
+    "Generate a list of personality quiz questions with four options each. "
+    "The questions should help identify traits like loyalty, intelligence, courage, and kindness."
+)
+generated_text = chatbot(prompt, max_length=200, num_return_sequences=1)[0]["generated_text"]
+
+# Parse the generated text into a structured format
+# Note: This parsing assumes the generated text is well-structured. Adjust as needed.
+questions = []
+for line in generated_text.split("\n"):
+    if "?" in line:
+        question = line.strip()
+        options = []
+    elif line.startswith("- "):
+        options.append(line[2:].strip())
+    if len(options) == 4:
+        questions.append({"question": question, "options": options})
 
 @app.route('/')
 def index():
