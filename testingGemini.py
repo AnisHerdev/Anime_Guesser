@@ -1,6 +1,10 @@
 from google import genai
+from dotenv import load_dotenv
+import os
 
-client = genai.Client(api_key="AIzaSyC2cqP6LarFWrEUFpywDOc6dVQGcGPiyCE")
+load_dotenv()
+api_key = os.getenv("API_KEY")
+client = genai.Client(api_key=api_key)
 
 response = client.models.generate_content(
     model="gemini-2.0-flash", contents=["Generate a list of personality quiz questions with four options each. "
