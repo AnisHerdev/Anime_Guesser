@@ -9,10 +9,10 @@
     <div class="container">
         <h1>Which Anime Character Are You?</h1>
         <form action="/submit" method="post">
-            {% for i, q in enumerate(questions) %}
+            {% for i in range(questions|length) %}
                 <div class="question-block">
-                    <p><strong>Q{{ i+1 }}:</strong> {{ q.question }}</p>
-                    {% for opt in q.options %}
+                    <p><strong>Q{{ i+1 }}:</strong> {{ questions[i] }}</p>
+                    {% for opt in options[i] %}
                         <label>
                             <input type="radio" name="q{{ i }}" value="{{ opt }}" required>
                             {{ opt }}
